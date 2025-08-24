@@ -3,16 +3,19 @@
 from typing import Any
 
 class Resource:
-    class Accounting:
-        name: str
-        type: str
     class AccountingApi:
         type: str
         url: str
+    class AccountingTable:
+        name: str
+        type: str
     class App:
         name: str
         stage: str
     class MyBucket:
         name: str
         type: str
+    class MySecret:
+        type: str
+        value: str
 

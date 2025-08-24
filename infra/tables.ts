@@ -1,4 +1,4 @@
-export const table = new sst.aws.Dynamo("Accounting", {
+export const accounting = new sst.aws.Dynamo("AccountingTable", {
     fields: { pk: "string", sk: "string", gsi1pk: "string", gsi1sk: "string", gsi2pk: "string", gsi2sk: "string" },
     primaryIndex: { hashKey: "pk", rangeKey: "sk" },
     globalIndexes: {

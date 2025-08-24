@@ -5,17 +5,21 @@
 
 declare module "sst" {
   export interface Resource {
-    "Accounting": {
-      "name": string
-      "type": "sst.aws.Dynamo"
-    }
     "AccountingApi": {
       "type": "sst.aws.ApiGatewayV2"
       "url": string
     }
+    "AccountingTable": {
+      "name": string
+      "type": "sst.aws.Dynamo"
+    }
     "MyBucket": {
       "name": string
       "type": "sst.aws.Bucket"
+    }
+    "MySecret": {
+      "type": "sst.sst.Secret"
+      "value": string
     }
   }
 }

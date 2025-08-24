@@ -4,7 +4,7 @@ GET https://nz2535s2dseiewlpfgwiqpmxgq0mymdd.lambda-url.eu-central-1.on.aws/
 ### Accounting
 
 #AlexanderFitterling
-#GET https://eagu5w9krb.execute-api.eu-central-1.amazonaws.com/health
+GET https://eagu5w9krb.execute-api.eu-central-1.amazonaws.com/health
 
-
+# Alex1
 GET https://pl4aobqe4d.execute-api.eu-central-1.amazonaws.com/health

@@ -1,0 +1,6 @@
+{
+  "type": "node",
+  "request": "attach",
+  "name": "Debug SST Function",
+  "port": 9229
+}

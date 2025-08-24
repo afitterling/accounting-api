@@ -1,0 +1,46 @@
+
+# DEV
+
+@api=https://1rqerjjxzc.execute-api.eu-central-1.amazonaws.com
+### 1. Health
+GET {{api}}/health
+
+### 2. Create a Book
+POST {{api}}/books
+content-type: application/json
+
+{
+  "name": "MyBook",
+  "baseCurrency": "EUR"
+}
+
+### 3. create account
+
+POST {{api}}/books/book1/accounts
+content-type: application/json
+
+{"code":"1000","name":"Cash","category":"ASSET"}
+
+
+### 4. Post a Balanced Entry
+@bookId=book1
+POST {{api}}/books/{{bookId}}/entries
+content-type: application/json
+
+{
+  "memo": "Sale #1",
+  "currency": "EUR",
+  "lines": [
+    { "accountCode": "1000", "debit": 1599 },
+    { "accountCode": "4000", "credit": 1599 }
+  ]
+}
+
+### 5. List Entries for current month
+GET {{api}}/books/{{bookId}}/entries?month=2025-08
+
+### 6. Ledger for account 1000
+GET {{api}}/books/{{bookId}}/accounts/1000/ledger?month=2025-08
+
+### 7. Trial Balance (if endpoint exists)
+GET {{api}}/books/{{bookId}}/reports/trial-balance?to=2025-08-31

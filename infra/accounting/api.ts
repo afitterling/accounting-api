@@ -1,4 +1,4 @@
-import { table } from "../tables";
+import { accounting } from "../tables";
 
 /* import { bucket } from "./storage";
 
@@ -13,7 +13,7 @@ export const api = new sst.aws.ApiGatewayV2("AccountingApi", {
     route: {
       handler: (args) => {
         args.runtime ??= "python3.11";
-        args.environment = { ...(args.environment ?? {}), TABLE_NAME: table.name };
+        args.environment = { ...(args.environment ?? {}) };
       },
     },
   },
@@ -24,37 +24,47 @@ api.route("GET /health", {
   handler: "packages/functions/src/utils.health",
   copyFiles: [{ from: "packages/functions/src/utils.py" }],
   runtime: "python3.11",
-  link: [table],
+  environment: { ACCOUNT_TABLE_NAME: accounting.name },
+  link: [accounting],
 });
 
 api.route("POST /books", {
   handler: "packages/functions/src/books.create_book",
-  link: [table],
+  copyFiles: [{ from: "packages/functions/src/books.py" }],
+  runtime: "python3.11",
+  link: [accounting],
 });
 
 api.route("GET /books/{bookId}/accounts", {
   handler: "packages/functions/src/accounts.list_accounts",
-  link: [table],
+  copyFiles: [{ from: "packages/functions/src/accounts.py" }],
+  runtime: "python3.11",
+  link: [accounting],
 });
 
 api.route("POST /books/{bookId}/accounts", {
   handler: "packages/functions/src/accounts.create_account",
-  link: [table],
+  copyFiles: [{ from: "packages/functions/src/accounts.py" }],
+  link: [accounting],
 });
 
 api.route("GET /books/{bookId}/entries", {
+  copyFiles: [{ from: "packages/functions/src/entries.py" }],
   handler: "packages/functions/src/entries.list_entries",
-  link: [table],
+  link: [accounting],
 });
 
 api.route("POST /books/{bookId}/entries", {
+  copyFiles: [{ from: "packages/functions/src/entries.py" }],
   handler: "packages/functions/src/entries.create_entry",
-  link: [table],
+  link: [accounting],
+  transform: {}
 });
 
 api.route("GET /books/{bookId}/accounts/{code}/ledger", {
+  copyFiles: [{ from: "packages/functions/src/ledger.py" }],
   handler: "packages/functions/src/ledger.get_ledger",
-  link: [table],
+  link: [accounting],
 });
 
 console.log(api.route);
