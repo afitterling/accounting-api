@@ -22,7 +22,8 @@ export const api = new sst.aws.ApiGatewayV2("AccountingApi", {
 // pro Route: link sauber setzen
 api.route("GET /health", {
   handler: "packages/functions/src/utils.health",
-  //runtime: "python3.11",
+  copyFiles: [{ from: "packages/functions/src/utils.py" }],
+  runtime: "python3.11",
   link: [table],
 });
 
