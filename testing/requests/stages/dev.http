@@ -14,6 +14,9 @@ content-type: application/json
   "baseCurrency": "EUR"
 }
 
+### GET BOOKS
+GET {{api}}/books
+
 ### 3. create account
 
 POST {{api}}/books/book1/accounts

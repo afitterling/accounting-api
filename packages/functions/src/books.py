@@ -10,16 +10,20 @@ from botocore.exceptions import ClientError
 #from sst import Resource
 
 # Get the table name from env
-TABLE_NAME = os.environ["ACCOUNTING_TABLE_NAME"]
+TABLE_NAME = os.environ["ACCOUNT_TABLE_NAME"]
 
 # Create DynamoDB client/resource
 dynamodb = boto3.resource("dynamodb")
 table = dynamodb.Table(TABLE_NAME)
+
+
 def _json_response(status, body):
     return {"statusCode": status, "body": json.dumps(body)}
 
 
 def create_book(event, context):
+    #print(json.dumps(dict(os.environ), indent=2))
+    #return
     body_raw = event.get("body") if isinstance(event, dict) else None
     try:
         payload = json.loads(body_raw) if body_raw else {}
@@ -29,10 +33,11 @@ def create_book(event, context):
     name = payload.get("name") or "Untitled"
     book_id = str(uuid.uuid4())
     now = datetime.now(timezone.utc).isoformat()
+    user_id = 1
 
     item = {
-        "pk": f"BOOK#{book_id}",
-        "sk": "BOOK",
+        "pk": f"user#{user_id}",
+        "sk": f"transaction#{now}",
         "type": "Book",
         "id": book_id,
         "name": name,
@@ -58,3 +63,25 @@ def create_book(event, context):
         )
 
     return _json_response(201, {"id": book_id, "name": name})
+
+def index_books(event, context):
+    """Listet alle Bücher auf."""
+    # User-ID aus Query-String oder Event holen
+    user_id = 1
+    if isinstance(event, dict):
+        # Versuche user_id aus Query-String zu holen
+        params = event.get("queryStringParameters") or {}
+        #user_id = params.get("user_id")
+    if not user_id:
+        user_id = 1  # Default oder aus Auth
+    try:
+        response = table.query(
+            KeyConditionExpression=Key("pk").eq(f"user#{user_id}") & Key("sk").begins_with("transaction#"),
+        )
+        books = response.get("Items")
+        print(books)
+        #books = [b for b in books if b["type"] == "Book"]
+        return _json_response(200, books)
+    except ClientError as e:
+        return _json_response(500, {"message": str(e)})
+

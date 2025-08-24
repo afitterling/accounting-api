@@ -31,6 +31,15 @@ api.route("GET /health", {
 api.route("POST /books", {
   handler: "packages/functions/src/books.create_book",
   copyFiles: [{ from: "packages/functions/src/books.py" }],
+  environment: { ACCOUNT_TABLE_NAME: accounting.name },
+  runtime: "python3.11",
+  link: [accounting],
+});
+
+api.route("GET /books", {
+  handler: "packages/functions/src/books.index_books",
+  copyFiles: [{ from: "packages/functions/src/books.py" }],
+  environment: { ACCOUNT_TABLE_NAME: accounting.name },
   runtime: "python3.11",
   link: [accounting],
 });

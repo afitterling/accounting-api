@@ -23,7 +23,7 @@ export default $config({
     return {
       //MyBucket: storage.bucket.name,
       //api: api || "no url",
-      //table.name,
+      accountingTable: accounting.name,
       api: api.url,
       secret: secret.name,
       secretVal: secret.value
